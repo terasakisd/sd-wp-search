@@ -12,6 +12,8 @@ data/
 # ログ
 logs/
 *.log
+# ただしクロール履歴は GitHub Actions が commit するのでコミット対象
+!logs/crawl_history.log
 
 # Python
 __pycache__/

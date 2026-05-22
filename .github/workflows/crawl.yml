@@ -5,6 +5,10 @@ on:
     - cron: '0 */6 * * *'
   workflow_dispatch:
 
+# 履歴ファイルを commit するために必要
+permissions:
+  contents: write
+
 jobs:
   crawl:
     name: クロール実行
@@ -30,3 +34,44 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         run: python -m app.crawler
+
+      - name: Supabase から現在件数を取得
+        id: stats
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          posts=$(curl -sS "$SUPABASE_URL/rest/v1/posts?select=count" \
+            -H "apikey: $SUPABASE_SERVICE_KEY" \
+            -H "Prefer: count=exact" | python3 -c "import json,sys; print(json.load(sys.stdin)[0]['count'])" 2>/dev/null || echo "?")
+          sites=$(curl -sS "$SUPABASE_URL/rest/v1/sites?select=count" \
+            -H "apikey: $SUPABASE_SERVICE_KEY" \
+            -H "Prefer: count=exact" | python3 -c "import json,sys; print(json.load(sys.stdin)[0]['count'])" 2>/dev/null || echo "?")
+          echo "posts=$posts" >> "$GITHUB_OUTPUT"
+          echo "sites=$sites" >> "$GITHUB_OUTPUT"
+
+      - name: 履歴ファイルを更新
+        if: always()
+        run: |
+          mkdir -p logs
+          ts=$(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M:%S %Z')
+          status='${{ job.status }}'
+          posts='${{ steps.stats.outputs.posts }}'
+          sites='${{ steps.stats.outputs.sites }}'
+          echo "$ts | status=$status | sites=$sites | posts=$posts" >> logs/crawl_history.log
+          # ファイルが肥大化しないよう直近500行だけ保持
+          tail -n 500 logs/crawl_history.log > logs/crawl_history.log.tmp
+          mv logs/crawl_history.log.tmp logs/crawl_history.log
+
+      - name: 履歴ファイルを commit & push
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add logs/crawl_history.log
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: クロール履歴更新 ($(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST'))"
+            git push
+          fi
