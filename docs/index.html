@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【SD】WP記事検索</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header>
+        <h1>【SD】WP記事検索</h1>
+        <div class="header-actions">
+            <span id="stats" class="stats"></span>
+        </div>
+    </header>
+
+    <main>
+        <aside class="sidebar">
+            <div class="facet" data-group="corporate">
+                <div class="facet-header">
+                    <h3>企業サイト</h3>
+                    <div class="facet-actions">
+                        <button class="link-btn js-select-group" data-group="corporate" type="button">全選択</button>
+                        <button class="link-btn js-clear-group" data-group="corporate" type="button">全解除</button>
+                    </div>
+                </div>
+                <div id="facet-sites-corporate" class="facet-list scrollable"></div>
+            </div>
+            <div class="facet" data-group="backlink">
+                <div class="facet-header">
+                    <h3>被リンクサイト</h3>
+                    <div class="facet-actions">
+                        <button class="link-btn js-select-group" data-group="backlink" type="button">全選択</button>
+                        <button class="link-btn js-clear-group" data-group="backlink" type="button">全解除</button>
+                    </div>
+                </div>
+                <div id="facet-sites-backlink" class="facet-list scrollable"></div>
+            </div>
+        </aside>
+
+        <section class="content">
+            <div class="search-bar">
+                <input type="search" id="query" placeholder="キーワードを入力 (例: WordPress、&quot;exact phrase&quot;)" autofocus>
+                <select id="sort">
+                    <option value="relevance">関連度順</option>
+                    <option value="newest">新しい順</option>
+                    <option value="oldest">古い順</option>
+                </select>
+            </div>
+
+            <div id="filter-chips" class="filter-chips"></div>
+
+            <div class="results-bar">
+                <div id="results-meta" class="results-meta"></div>
+                <button id="copy-urls-btn" class="btn btn-secondary" type="button" disabled>URLをコピー</button>
+            </div>
+            <ol id="results" class="results"></ol>
+            <div id="pagination" class="pagination"></div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>

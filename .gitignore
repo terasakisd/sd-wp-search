@@ -1,0 +1,37 @@
+# シークレット (絶対にコミット禁止)
+.env
+.env.*
+!.env.example
+
+# ローカルDB (SQLite)
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# ログ
+logs/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Docker残骸 (削除済みだが念のため)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# その他
+sites.txt

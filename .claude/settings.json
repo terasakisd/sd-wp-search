@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sqlite3 data/posts.db)",
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('/tmp/body.json'\\)\\); print\\(f'  count: {len\\(d\\) if isinstance\\(d, list\\) else type\\(d\\).__name__}'\\); print\\(f'  first id/title: {d[0].get\\(\\\\\"id\\\\\"\\) if d else None}'\\)\")",
+      "Bash(curl -sS -L --max-time 15 -o /tmp/w.json -w 'HTTP=%{http_code} FINAL=%{url_effective}\\\\n' https://talent.weeker.jp/column/?rest_route=/wp/v2/posts)",
+      "Bash(curl -sS --max-time 15 https://www.jkeiei.co.jp/m/column-media/?rest_route=/wp/v2/posts -o /tmp/j.json)",
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('/tmp/j.json'\\)\\); print\\(f'count={len\\(d\\)}; first link={d[0][\\\\\"link\\\\\"] if d else None}'\\)\")",
+      "Bash(curl -sS --max-time 15 https://www.aichidaikyo.or.jp/systems/?rest_route=/wp/v2/posts -o /tmp/a.json)",
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('/tmp/a.json'\\)\\); print\\(f'count={len\\(d\\)}; first link={d[0][\\\\\"link\\\\\"] if d else None}'\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -sSI --max-time 15 \"https://okagekk.com/wp-json/wp/v2/column?per_page=1\")",
+      "Bash(curl -sSI --max-time 15 \"https://okagekk.com/wp-json/wp/v2/column?column_cate=47&per_page=1\")",
+      "Bash(curl -sS -L --max-time 12 -o /dev/null -w 'FINAL=%{url_effective} HTTP=%{http_code}\\\\n' 'https://www.aichidaikyo.or.jp/systems/?rest_route=/wp/v2/posts&per_page=3')",
+      "Bash(curl -sS -L --max-time 12 -o /dev/null -w 'FINAL=%{url_effective} HTTP=%{http_code}\\\\n' 'https://www.jkeiei.co.jp/m/column-media/?rest_route=/wp/v2/posts&per_page=3')",
+      "Bash(curl -sS -D /tmp/h.txt --max-time 30 -o /tmp/b.json 'https://www.jkeiei.co.jp/m/column-media/?rest_route=/wp/v2/posts&per_page=100&page=1&orderby=id&order=asc&_embed=1')",
+      "Bash(curl -sS -D /tmp/h2.txt --max-time 30 -o /tmp/b2.json 'https://www.jkeiei.co.jp/m/column-media/?rest_route=/wp/v2/posts&per_page=100&page=1&orderby=id&order=asc')"
+    ]
+  }
+}

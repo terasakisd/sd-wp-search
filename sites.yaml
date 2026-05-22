@@ -1,0 +1,421 @@
+# クロール対象のWordPressサイト一覧
+# id は内部識別用の一意な短い名前 (省略時は name と同じ値が使われる)
+# url は WordPress サイトのトップ URL (末尾スラッシュなし)
+# /wp-json/wp/v2/posts が公開されている必要があります
+# group は所属グループ (UIのタブで切替)
+
+groups:
+  - id: backlink
+    name: 被リンクサイト
+  - id: corporate
+    name: 企業サイト
+
+sites:
+  # ----- 被リンクサイト -----
+  - name: "クレジットカード おすすめ"
+    url: https://www.ics-expo.jp
+    group: backlink
+  - name: "グリーン・ゾーン・リーフ"
+    url: https://greenzone-ninsho.jp
+    group: backlink
+  - name: "グリーン・ゾーン・ファイナンス"
+    url: https://greenzone-ninsho.jp/finance
+    group: backlink
+  - name: "スイーツパークメディア"
+    url: https://sweetsguide.jp/media
+    group: backlink
+  - name: "金融とつなぐ"
+    url: https://www.it-renkei.jp
+    group: backlink
+  - name: "スイーツパークマップ"
+    url: https://sweetsguide.jp
+    group: backlink
+  - name: "極限環境金融学会"
+    url: https://www.extremophiles.jp
+    group: backlink
+  - name: "千葉東情報局"
+    url: https://www.chiba-easthp.jp
+    group: backlink
+  - name: "お金借りる方法をまとめてみた"
+    url: https://xs18sd18top.xsrv.jp
+    group: backlink
+  - name: "マキノの金融情報局"
+    url: https://www.makino-g.jp
+    group: backlink
+  - name: "金融交流国際センター"
+    url: https://www.jfkc.jp
+    group: backlink
+  - name: "PDSマネーラボ"
+    url: https://pds2024.jp
+    group: backlink
+  - name: "アンディ・ヨシカズのマネサロン"
+    url: https://www.andywarholkyoto.jp
+    group: backlink
+  - name: "クレジットカードのおすすめランキング2024年最新版！カード初心者が気を付けたい事"
+    url: https://xs19sd19top.xsrv.jp
+    group: backlink
+  - name: "事業承継補助金ポータル"
+    url: https://www.shokei-hojo.jp
+    group: backlink
+  - name: "どうしてもお金が必要な時に状況に合う借り方を紹介"
+    url: https://marianna-toyoko.jp
+    group: backlink
+  - name: "銀行の展示会"
+    url: https://banksyexhibition.jp
+    group: backlink
+  - name: "ジャパン金融アクション"
+    url: https://www.japan-sdgs-action-festival.jp
+    group: backlink
+  - name: "エキシビジョンカードローン"
+    url: https://www.17wcee-exhibition.jp
+    group: backlink
+  - name: "マネーの正直者"
+    url: https://moneyfact.jp
+    group: backlink
+  - name: "アロハマネートレンド"
+    url: https://www.towatown.jp
+    group: backlink
+  - name: "ジェイソンのDebitナビゲーション"
+    url: https://jdebit.jp
+    group: backlink
+  - name: "おすすめのクレジットカード比較【属性別】"
+    url: https://commons-web.jp
+    group: backlink
+  - name: "マネーの森林"
+    url: https://www.aimori.jp
+    group: backlink
+  - name: "マネーアクティビティセンター"
+    url: https://stopcovid19-for-npo.jp
+    group: backlink
+  - name: "松浦金融会議所"
+    url: https://www.e-matsuura2.jp
+    group: backlink
+  - name: "ITSお金フォーラム"
+    url: https://www.itsap-fukuoka.jp
+    group: backlink
+  - name: "ジョブ支援"
+    url: https://jobchan.jp
+    group: backlink
+  - name: "京のマネーと小売・サービス業を応援したい事業団"
+    url: https://kyoto-premium.jp
+    group: backlink
+  - name: "いわてカード情報館"
+    url: https://www.iwate-tabipro-ver4.jp
+    group: backlink
+  - name: "転職の入り口"
+    url: https://pro-partner.workany.jp
+    group: backlink
+  - name: "ネットマネーラボ"
+    url: https://osdn.jp
+    group: backlink
+  - name: "脱毛ジャーナル"
+    url: https://xs13sd15top.xsrv.jp
+    group: backlink
+  - name: "学生ボランティアナビ"
+    url: https://gakuvo.jp
+    group: backlink
+  - name: "キューメッド美容研究所"
+    url: https://www.kyumed.jp
+    group: backlink
+  - name: "マネーソレイユ"
+    url: https://www.soleil-hall.jp
+    group: backlink
+  - name: "RADIX BEAUTY"
+    url: https://www.radiex.jp
+    group: backlink
+  - name: "マネーリパブリック"
+    url: https://loan8.xsrv.jp
+    group: backlink
+  - name: "お金の助っ人団"
+    url: https://www.squet.jp
+    group: backlink
+  - name: "桜クレジット大全"
+    url: https://cardcard.xsrv.jp
+    group: backlink
+  - name: "JOSKAS総合学会"
+    url: https://www.joskas.jp
+    group: backlink
+  - name: "JOSKASビューティー学会"
+    url: https://www.joskas.jp/beauty
+    group: backlink
+  - name: "高速バス・夜行バスの格安プランが一目で分かる！JRバス教授　全国網羅版"
+    url: https://www.kakuyasubus.jp
+    group: backlink
+  - name: "平凡なお金の友"
+    url: https://www.heibonnotomo.jp
+    group: backlink
+  - name: "食材ガイドマルシェ"
+    url: https://xs21sd21top.xsrv.jp
+    group: backlink
+  - name: "etc 助成金"
+    url: https://etc-2022.jp
+    group: backlink
+  - name: "春風会きらら"
+    url: https://gh-shunpukai-kirara.jp
+    group: backlink
+  - name: "瓦の上のライフハック"
+    url: https://w-kawara.jp
+    group: backlink
+  - name: "がくさいビューティー院"
+    url: https://gakusai-hp.jp
+    group: backlink
+  - name: "エヌ・ティー・エス労務塾"
+    url: https://nts-sr.jp
+    group: backlink
+  - name: "不動産の先生"
+    url: https://www.ashita-lab.jp
+    group: backlink
+  - name: "おまとめローン おすすめ"
+    url: https://www.ort-osaka-med.jp
+    group: backlink
+  - name: "ビム支援室"
+    url: https://bim-shien.jp
+    group: backlink
+  - name: "クラシキG7"
+    url: https://g7kurashiki.jp
+    group: backlink
+  - name: "アバウトライフクリプト"
+    url: https://aboutlife-movie.jp
+    group: backlink
+  - name: "ファイナンスフェスタグローバル"
+    url: https://gfjapan2024.jp
+    group: backlink
+  - name: "美容と1型糖尿病研究会"
+    url: https://jt1d.jp
+    group: backlink
+  - name: "w-fan"
+    url: https://w-fan.jp
+    group: backlink
+  - name: "お金を学ぶ東海会"
+    url: https://www.jicpa-tokai.jp
+    group: backlink
+  - name: "サナイキレイ"
+    url: https://www.3nai.jp
+    group: backlink
+  - name: "日常おすすめ情報くらぶ"
+    url: https://xs15sd15top.xsrv.jp
+    group: backlink
+  - name: "人気のキャッシングおすすめランキング【最新版】"
+    url: https://www.17wcee.jp
+    group: backlink
+  - name: "リターンマネー999"
+    url: https://xs941194.xsrv.jp
+    group: backlink
+  - name: "一般社団法人日本マネーギー学会"
+    url: https://www.jsa-pr.jp
+    group: backlink
+  - name: "お金の森運動場"
+    url: https://www.sport-aoimori.jp
+    group: backlink
+  - name: "クロスコンテンツライブラリー"
+    url: https://ryug462.xsrv.jp
+    group: backlink
+  - name: "プリヴェール・ビューティー"
+    url: https://bluellama39.sakura.ne.jp
+    group: backlink
+  - name: "ご当地グルメの通販"
+    url: https://gotoeat-hokkaido.jp
+    group: backlink
+  - name: "啓明舎な啓明館"
+    url: https://olivesheep64.sakura.ne.jp
+    group: backlink
+  - name: "カード見聞録"
+    url: https://maroonpanda92.sakura.ne.jp
+    group: backlink
+  - name: "お金と金融・経済のコンクール"
+    url: https://www.ron2024.jp
+    group: backlink
+  - name: "waseda-sport科学研究室"
+    url: https://waseda-sport.jp
+    group: backlink
+  - name: "日本HISビューティー"
+    url: https://j-his.jp
+    group: backlink
+  - name: "ヨコハマカワイイパーク好きの横浜みなとが発信する祭りと人生の楽しみ方"
+    url: https://y-k-park.jp
+    group: backlink
+  - name: "金融倹約ゼミ"
+    url: https://bgfsc.jp
+    group: backlink
+  - name: "FIN MONEY"
+    url: https://www.fincy.jp
+    group: backlink
+  - name: "クレカビション"
+    url: https://usy.jp
+    group: backlink
+  - name: "ナカムラビューティラボ"
+    url: https://nakamura-shinryosho.jp
+    group: backlink
+  - name: "創業促進補助金ガイドブック"
+    url: https://sogyo-hojo.jp
+    group: backlink
+  - name: "ファイナンシャルターン"
+    url: https://www.f-turn.jp
+    group: backlink
+  - name: "イントーディエント"
+    url: https://farming-ec.jp
+    group: backlink
+  - name: "金融の豆知識"
+    url: https://www.hall-okegawa.jp
+    group: backlink
+  - name: "お金のお悩み解決ナビ"
+    url: https://www.zenkokusrseiren.jp
+    group: backlink
+  - name: "goto＠yamanashi.jp"
+    url: https://www.gotoeat-yamanashi.jp
+    group: backlink
+  - name: "アドバックファイナンス"
+    url: https://advack.net/contents
+    group: backlink
+  - name: "一般社団法人日本マネーギーモジュール学会"
+    url: https://www.jsa-pr.jp/modules
+    group: backlink
+  - name: "お金の総合案内所"
+    url: https://xs24sd24top.xsrv.jp
+    group: backlink
+  - name: "次世代マネー戦略"
+    url: https://www.neomoney.jp
+    group: backlink
+  - name: "投資を学ぶ喫茶店"
+    url: https://www.nisa-kissa.jp
+    group: backlink
+  - name: "金融向上ポータルちば"
+    url: https://chiba-seisansei-up.jp
+    group: backlink
+  - name: "美容情報室"
+    url: https://www.cataract-iol.jp
+    group: backlink
+  - name: "やまなしお金の学習室"
+    url: https://www.ucon-yamanashi.jp
+    group: backlink
+  - name: "金融促進プラザ"
+    url: https://fukui-kaigai.jp
+    group: backlink
+  - name: "マネー支援情報センター"
+    url: https://www.hyogo-hikitsugi.jp
+    group: backlink
+  - name: "和のヘルスストア"
+    url: https://wadacalshop.jp
+    group: backlink
+  - name: "OMくらし研究所"
+    url: https://omics.jp
+    group: backlink
+  - name: "はんなり金融リサーチ"
+    url: https://keihanna-rc.jp
+    group: backlink
+
+  # ----- 企業サイト -----
+  - name: "とうかい"
+    url: https://www.tokai-sr.jp/cms/
+    group: corporate
+  - name: "ndc"
+    url: https://ndc-center.jp/entries
+    group: corporate
+  - name: "SMC"
+    url: https://www.smc-g.co.jp/html
+    group: corporate
+  - name: "イーキャンパス"
+    url: https://www.ecampus.jp
+    group: corporate
+    # REST APIに公開されないカスタム投稿のためHTMLスクレイピング経由
+    scrape:
+      archive_url: https://www.ecampus.jp/reading-category/borrowing/
+      link_re: "^https://www\\.ecampus\\.jp/reading-(?!category)[a-z0-9-]+/?$"
+  - name: "イー旅"
+    url: https://www.e-tabinet.com/column
+    group: corporate
+  - name: "愛代協"
+    url: https://www.aichidaikyo.or.jp/systems
+    group: corporate
+  - name: "豊明損保"
+    url: https://jpforest.co.jp/html/
+    group: corporate
+  - name: "サイトスコープ"
+    url: https://www.sitescope.co.jp/card
+    group: corporate
+  - name: "SDファイナンス"
+    url: https://southerndia.co.jp/column/
+    group: corporate
+  - name: "SDオリパマガジン"
+    url: https://southerndia.co.jp/oripa/
+    group: corporate
+  - name: "末松会計"
+    url: https://sue-tax.com/news/finance
+    group: corporate
+  - name: "実務経営"
+    url: https://www.jkeiei.co.jp/m/column-media/
+    group: corporate
+  - name: "サムライズ(WEL)"
+    url: https://some-rize.jp/knowledge-cms
+    group: corporate
+  - name: "ニナファーム"
+    url: https://www.ninapharm.co.jp/contents
+    group: corporate
+  - name: "weeker"
+    url: https://talent.weeker.jp/cms
+    group: corporate
+  - name: "ランドセル博士"
+    url: https://magazine.kochinews.co.jp
+    group: corporate
+  - name: "okage (生活の知恵)"
+    url: https://okagekk.com
+    group: corporate
+    post_type: column         # カスタム投稿タイプ「お役立ちコラム」
+    extra_params:
+      column_cate: 47         # 「生活の知恵」カテゴリのID
+  - name: "おまかせ相続"
+    url: https://omakasesozoku.jp
+    group: corporate
+  - name: "マイナビ (家具レンタル)"
+    url: https://news.mynavi.jp/kagurental
+    group: corporate
+  - name: "マイナビ (電力・ガス)"
+    url: https://news.mynavi.jp/energy
+    group: corporate
+  - name: "トリム"
+    url: https://www.k-trim.co.jp/articles
+    group: corporate
+  - name: "モノコエ"
+    url: https://monoka.jp
+    group: corporate
+  - name: "smashop"
+    url: https://smashop.jp
+    group: corporate
+  - name: "Jエンジン"
+    url: https://www.jmatch.jp/topics
+    group: corporate
+  - name: "ペイメントナビ"
+    url: https://paymentnavi.com/cms
+    group: corporate
+  - name: "エコスマート（更年期相談室）"
+    url: https://konenki-sodan.jp
+    group: corporate
+  - name: "きんさんクリニック"
+    url: https://kinsanclinic.jp/media
+    group: corporate
+  - name: "メディカルリンク"
+    url: https://medical-link.co.jp/nextcareers
+    group: corporate
+  - name: "ドルフィンインターネット"
+    url: https://www.din.or.jp/top/internet
+    group: corporate
+  - name: "boom-app"
+    url: https://game.boom-app.com
+    group: corporate
+  # ----- 追加URL (別ドメイン / サブパス違い) -----
+  - name: "ndc (access/finance)"
+    url: https://ndc-center.jp/access/finance
+    group: corporate
+  - name: "マイナビ (家具レンタル サブサブドメイン)"
+    url: https://home.news.mynavi.jp
+    group: corporate
+  - name: "マイナビ (電力・ガス サブドメイン)"
+    url: https://energy.news.mynavi.jp
+    group: corporate
+
+# クロール設定
+crawl:
+  per_page: 100           # 1リクエスト当たりの取得件数 (WP最大100)
+  request_timeout: 30     # HTTPタイムアウト(秒)
+  delay_between_requests: 0.5  # サイト負荷軽減のための間隔(秒)
+  schedule_hours: 6       # 何時間ごとに自動クロールするか
