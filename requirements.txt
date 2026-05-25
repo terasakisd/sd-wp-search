@@ -7,3 +7,5 @@ jinja2==3.1.4
 beautifulsoup4==4.12.3
 # Supabase クライアント (GitHub Actions クローラ用)
 supabase==2.9.1
+# WAFのTLS指紋判定を回避するためのChrome偽装HTTPクライアント
+curl_cffi>=0.7.0,<1.0

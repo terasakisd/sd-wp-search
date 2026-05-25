@@ -146,13 +146,20 @@ async def fetch_page(
         for k, v in extra_params.items():
             params[k] = v
 
-    def _is_json_response(r: httpx.Response) -> bool:
+    def _is_json_response(r) -> bool:
         ctype = r.headers.get("content-type", "")
         return "json" in ctype.lower()
 
     # /wp-json/ 形式を試す (リダイレクトは追跡しない)
     url = f"{base_url}/wp-json/wp/v2/{rest_base}"
     resp = await client.get(url, params=params, follow_redirects=False)
+
+    # 403 → WAF が TLS フィンガープリントで弾いてる可能性
+    # curl_cffi で Chrome 偽装してリトライ
+    if resp.status_code == 403:
+        cffi_result = await _try_curl_cffi(url, params, dict(client.headers))
+        if cffi_result is not None:
+            return cffi_result
 
     # 3xx (wp-json が別ページに転送される構成) / 404 / 非JSON →
     # ?rest_route= 形式にフォールバック
@@ -163,9 +170,15 @@ async def fetch_page(
     )
     if needs_fallback:
         fallback_params = {"rest_route": f"/wp/v2/{rest_base}", **params}
+        fallback_url = f"{base_url}/"
         resp = await client.get(
-            f"{base_url}/", params=fallback_params, follow_redirects=False
+            fallback_url, params=fallback_params, follow_redirects=False
         )
+        # フォールバックでも 403 なら curl_cffi で再試行
+        if resp.status_code == 403:
+            cffi_result = await _try_curl_cffi(fallback_url, fallback_params, dict(client.headers))
+            if cffi_result is not None:
+                return cffi_result
         # フォールバックも 301/302 を返すサイトがあるので 1段だけ追跡
         if 300 <= resp.status_code < 400:
             loc = resp.headers.get("location")
@@ -190,6 +203,38 @@ async def fetch_page(
     total_pages = int(resp.headers.get("X-WP-TotalPages", "1") or "1")
     total = int(resp.headers.get("X-WP-Total", "0") or "0")
     return resp.json(), total_pages, total
+
+
+async def _try_curl_cffi(
+    url: str, params: dict, headers: dict
+) -> tuple[list[dict], int, int] | None:
+    """curl_cffi で Chrome TLS 指紋を再現して再取得。
+
+    成功すれば (data, total_pages, total)、失敗すれば None を返す。
+    """
+    try:
+        from curl_cffi.requests import AsyncSession  # type: ignore
+    except ImportError:
+        log.warning("curl_cffi が未インストール。403 リトライをスキップ")
+        return None
+
+    try:
+        async with AsyncSession(impersonate="chrome124") as cf:
+            r = await cf.get(url, params=params, headers=headers, timeout=30, allow_redirects=False)
+        if r.status_code != 200:
+            log.warning(f"curl_cffi {url} → {r.status_code}")
+            return None
+        ctype = r.headers.get("content-type", "")
+        if "json" not in ctype.lower():
+            log.warning(f"curl_cffi {url} → non-JSON ({ctype})")
+            return None
+        total_pages = int(r.headers.get("X-WP-TotalPages", "1") or "1")
+        total = int(r.headers.get("X-WP-Total", "0") or "0")
+        log.info(f"curl_cffi success: {url} ({total} posts)")
+        return r.json(), total_pages, total
+    except Exception as e:
+        log.warning(f"curl_cffi error for {url}: {e}")
+        return None
 
 
 async def _walk_all_pages(
@@ -556,8 +601,14 @@ async def crawl_all(only_site_ids: list[str] | None = None) -> dict[str, int]:
 
 def main() -> None:
     db.init_db()
+    # 環境変数 CRAWL_ONLY_SITE_IDS で対象サイトを絞れる
+    # (カンマ区切り、空白可。空なら全件)
+    only_env = os.getenv("CRAWL_ONLY_SITE_IDS", "").strip()
+    only_ids = [s.strip() for s in only_env.split(",") if s.strip()] or None
+    if only_ids:
+        log.info(f"crawl restricted to {len(only_ids)} sites: {only_ids}")
     start = time.time()
-    results = asyncio.run(crawl_all())
+    results = asyncio.run(crawl_all(only_site_ids=only_ids))
     elapsed = time.time() - start
     log.info(f"all done in {elapsed:.1f}s: {results}")
 
