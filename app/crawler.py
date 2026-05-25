@@ -498,7 +498,7 @@ async def crawl_all(only_site_ids: list[str] | None = None) -> dict[str, int]:
     if only_site_ids:
         sites = [s for s in sites if s["id"] in only_site_ids]
 
-    # WAF/CDN ブロック回避のため、ブラウザ風 User-Agent を送る
+    # WAF/CDN ブロック回避のため、Chrome ライクなヘッダ一式を送る
     _browser_headers = {
         "User-Agent": (
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -507,6 +507,16 @@ async def crawl_all(only_site_ids: list[str] | None = None) -> dict[str, int]:
         ),
         "Accept": "application/json, text/html;q=0.9, */*;q=0.8",
         "Accept-Language": "ja,en-US;q=0.7,en;q=0.3",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Sec-Ch-Ua": '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"macOS"',
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin",
+        "Upgrade-Insecure-Requests": "1",
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
     }
 
     # 旧式SSL (DH_KEY_TOO_SMALL 等) サイト対応: SECLEVEL を 1 に下げる

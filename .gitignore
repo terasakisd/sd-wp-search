@@ -9,11 +9,12 @@ data/
 *.db-shm
 *.db-wal
 
-# ログ
-logs/
+# ログ (中身は無視するが、特定ファイルだけ管理対象)
+logs/*
 *.log
-# ただしクロール履歴は GitHub Actions が commit するのでコミット対象
+# クロール履歴は GitHub Actions が commit するのでコミット対象
 !logs/crawl_history.log
+!logs/.gitkeep
 
 # Python
 __pycache__/
