@@ -248,18 +248,19 @@ async def _walk_all_pages(
     delay: float,
     rest_base: str = "posts",
     extra_params: dict | None = None,
-) -> tuple[int, str | None, int, set[int]]:
+) -> tuple[int, str | None, int, set[int], str | None]:
     """指定モードで全ページを1回最後まで走る。
 
     タイムアウト等で途中失敗した場合は例外を上位に伝播させ、
     上位がより弱いモードで page=1 から再走できるようにする。
-    返り値: (取得件数, 最新 modified, サーバ側の総件数, 取得した post_id 集合)
+    返り値: (取得件数, 最新 modified, サーバ側の総件数, 取得した post_id 集合, 最初の記事URL)
     """
     count = 0
     page = 1
     newest_modified = modified_after
     server_total = 0
     fetched_ids: set[int] = set()
+    sample_url: str | None = None
     while True:
         posts, total_pages, server_total = await fetch_page(
             client, base_url,
@@ -274,6 +275,8 @@ async def _walk_all_pages(
             normalized = normalize_post(site_id, post, base_url=base_url)
             db.upsert_post(normalized)
             count += 1
+            if sample_url is None and normalized.get("url"):
+                sample_url = normalized["url"]
             pid = normalized.get("post_id")
             if pid is not None:
                 try:
@@ -293,7 +296,7 @@ async def _walk_all_pages(
         page += 1
         await asyncio.sleep(delay)
 
-    return count, newest_modified, server_total, fetched_ids
+    return count, newest_modified, server_total, fetched_ids, sample_url
 
 
 async def crawl_site(
@@ -344,7 +347,7 @@ async def crawl_site(
             log.info(
                 f"[{site_id}] attempt embed={attempt['embed']} per_page={attempt['per_page']}"
             )
-            count, newest, server_total, fetched_ids = await _walk_all_pages(
+            count, newest, server_total, fetched_ids, sample_url = await _walk_all_pages(
                 client, site_id, base_url,
                 per_page=attempt["per_page"],
                 embed=attempt["embed"],
@@ -363,11 +366,16 @@ async def crawl_site(
                 )
             log.info(f"[{site_id}] done: {count} posts (server reports {server_total})")
 
-            # ウィジット領域のテキストを取得 (サイト共通エリア)
-            widget_text = await _fetch_widget_text(client, base_url)
-            if _upsert_widget_post(site_id, site["name"], base_url, widget_text):
+            # ウィジット領域のテキストを取得 (記事ページ周辺の注釈・サイドバー等)
+            # 記事URLが取れない場合は base_url にフォールバック
+            widget_source = sample_url or base_url
+            widget_text = await _fetch_widget_text(client, widget_source)
+            if _upsert_widget_post(site_id, site["name"], widget_source, widget_text):
                 fetched_ids.add(-1)
-                log.info(f"[{site_id}] widget saved ({len(widget_text)} chars)")
+                log.info(
+                    f"[{site_id}] widget saved from article page "
+                    f"({len(widget_text)} chars)"
+                )
 
             # purge_stale 成功時: 取得できなかった post を削除 (安全装置なし)
             # 全件取得 (last_modified is None) のときのみ
@@ -403,15 +411,15 @@ def _url_to_post_id(url: str) -> int:
     return int(h[:15], 16)  # 15桁hex ≈ 60bit
 
 
-async def _fetch_widget_text(client: httpx.AsyncClient, base_url: str) -> str:
-    """サイトのトップページから記事本文以外のテキスト (ウィジット領域) を抽出。
+async def _fetch_widget_text(client: httpx.AsyncClient, sample_url: str) -> str:
+    """記事ページから記事本文以外のテキスト (注釈・サイドバー等のウィジット領域) を抽出。
 
     記事本文 (main/article/.entry-content/#content) を削除した残りを集める。
-    結果としてサイドバー・フッター・ヘッダー・関連リンクなどのウィジット系
-    要素のテキストが取れる。
+    結果としてサイドバー・フッター・ヘッダー・関連リンク・注釈などの
+    記事ページ周辺の要素テキストが取れる。
     """
     try:
-        r = await client.get(base_url, follow_redirects=True)
+        r = await client.get(sample_url, follow_redirects=True)
         if r.status_code != 200:
             return ""
         if "html" not in r.headers.get("content-type", "").lower():
@@ -431,7 +439,7 @@ async def _fetch_widget_text(client: httpx.AsyncClient, base_url: str) -> str:
             text = text[:30000]
         return text
     except Exception as e:
-        log.warning(f"widget fetch failed for {base_url}: {e}")
+        log.warning(f"widget fetch failed for {sample_url}: {e}")
         return ""
 
 
@@ -633,11 +641,15 @@ async def crawl_site_scrape(
     )
     log.info(f"[{site_id}] scrape done: {count} articles ({fetch_errors} errors)")
 
-    # ウィジット領域のテキストを取得 (サイト共通エリア)
-    widget_text = await _fetch_widget_text(client, base_url)
-    if _upsert_widget_post(site_id, site["name"], base_url, widget_text):
+    # ウィジット領域のテキストを取得 (記事ページ周辺の注釈・サイドバー等)
+    widget_source = article_urls[0] if article_urls else base_url
+    widget_text = await _fetch_widget_text(client, widget_source)
+    if _upsert_widget_post(site_id, site["name"], widget_source, widget_text):
         fetched_ids.add(-1)
-        log.info(f"[{site_id}] widget saved ({len(widget_text)} chars)")
+        log.info(
+            f"[{site_id}] widget saved from article page "
+            f"({len(widget_text)} chars)"
+        )
 
     # purge_stale: アーカイブに無い旧記事を削除 (安全装置なし、消してもDBだけ)
     if purge_stale:
