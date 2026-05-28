@@ -53,13 +53,18 @@ CREATE INDEX IF NOT EXISTS idx_posts_published  ON posts (published_at DESC);
 --     例: 'クレジット & カード'  /  '東 <-> 京 <-> 駅' (フレーズ)
 -- ============================================================================
 
+-- 旧版が残っていると overload 衝突するので明示的に DROP
+DROP FUNCTION IF EXISTS search_posts(TEXT, TEXT[], TEXT, TEXT, INT, INT);
+DROP FUNCTION IF EXISTS search_posts(TEXT, TEXT[], TEXT, TEXT, INT, INT, BOOLEAN);
+
 CREATE OR REPLACE FUNCTION search_posts(
     fts_query TEXT DEFAULT '',
     p_site_ids TEXT[] DEFAULT NULL,
     p_group_id TEXT DEFAULT NULL,
     p_sort TEXT DEFAULT 'relevance',
     p_limit INT DEFAULT 30,
-    p_offset INT DEFAULT 0
+    p_offset INT DEFAULT 0,
+    p_widgets_only BOOLEAN DEFAULT FALSE
 )
 RETURNS TABLE (
     site_id TEXT,
@@ -93,6 +98,12 @@ BEGIN
             (NOT use_fts OR p.fts @@ q)
             AND (p_site_ids IS NULL OR p.site_id = ANY(p_site_ids))
             AND (p_group_id IS NULL OR s.group_id = p_group_id)
+            -- ウィジット領域 (post_id=-1) は通常検索では除外、
+            -- p_widgets_only=TRUE のときのみ対象にする
+            AND (
+                (p_widgets_only AND p.post_id = -1)
+                OR (NOT p_widgets_only AND p.post_id <> -1)
+            )
     ),
     counted AS (
         SELECT *,

@@ -12,6 +12,7 @@ const state = {
     siteMeta: {},          // id -> {name, group_id, count}
     lastTotal: 0,
     lastCrawledAt: null,   // データ最終更新の概算 (結果の最大 published_at)
+    widgetsOnly: false,    // true: ウィジット内のみ検索
 };
 
 const $ = (sel) => document.querySelector(sel);
@@ -234,6 +235,7 @@ async function rpcSearch({ limit, offset }) {
         p_sort: state.sort,
         p_limit: limit,
         p_offset: offset,
+        p_widgets_only: state.widgetsOnly,
     };
     const { data, error } = await sb.rpc("search_posts", args);
     if (error) {
@@ -467,6 +469,7 @@ async function fetchAllResultUrls() {
             p_sort: state.sort,
             p_limit: pageSize,
             p_offset: offset,
+            p_widgets_only: state.widgetsOnly,
         });
         if (error) throw error;
         const rows = data || [];
@@ -523,6 +526,11 @@ $("#query").addEventListener("input", (e) => {
 });
 $("#sort").addEventListener("change", (e) => {
     state.sort = e.target.value;
+    state.page = 0;
+    runSearch();
+});
+$("#widgets-only").addEventListener("change", (e) => {
+    state.widgetsOnly = e.target.checked;
     state.page = 0;
     runSearch();
 });

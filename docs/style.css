@@ -108,6 +108,16 @@ main {
     cursor: pointer;
 }
 
+.search-options {
+    display: flex; gap: 16px; align-items: center;
+    margin-bottom: 10px; font-size: 13px;
+}
+.widget-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    cursor: pointer; user-select: none;
+}
+.widget-toggle input { cursor: pointer; }
+
 .filter-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 .chip {
     display: inline-flex; align-items: center; gap: 4px;
